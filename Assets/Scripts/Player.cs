@@ -4,25 +4,49 @@ namespace Assets.Scripts
 {
     public class Player : MonoBehaviour
     {
-        Shooter shooter = new Shooter();
+        private Shooter _shooter = new Shooter();
+        private Shooter _pistol = new Shooter();
+        private Shooter _shotgun = new Shooter();
+        private Shooter _infinitePistol = new Shooter();
+
+        [SerializeField] private Bullet _pistolBullet;
+
+        private Vector2 _mousePosition;
+
+        private void Start()
+        {
+            _pistol.SetWeapon(new Pistol(_pistolBullet));
+            _shotgun.SetWeapon(new Shotgun());
+            _infinitePistol.SetWeapon(new InfinitePistol());
+        }
 
         private void Update()
         {
+            _mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                shooter.SetWeapon(new Pistol());
+                _shooter = _pistol;
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                shooter.SetWeapon(new InfinitePistol());
+                _shooter = _shotgun;
             }
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                shooter.SetWeapon(new Shotgun());
+                _shotgun= _infinitePistol;
             }
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                shooter.PerformAttack();
+                _shooter.PerformAttack(_mousePosition);
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _shooter.PerformReload();
+            }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                Debug.Log($"Ammo is {_shooter.PerformGetAmmoCount()}");
             }
         }
     }
