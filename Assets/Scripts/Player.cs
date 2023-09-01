@@ -13,16 +13,22 @@ namespace Assets.Scripts
 
         private Vector2 _mousePosition;
 
+        [SerializeField] private GameObject _pistolPoint;
+        private Vector2 _bulletSpawnPoint;
+
         private void Start()
         {
             _pistol.SetWeapon(new Pistol(_pistolBullet));
-            _shotgun.SetWeapon(new Shotgun());
-            _infinitePistol.SetWeapon(new InfinitePistol());
+            _shotgun.SetWeapon(new Shotgun(_pistolBullet));
+            _infinitePistol.SetWeapon(new InfinitePistol(_pistolBullet));
         }
 
         private void Update()
         {
             _mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            _bulletSpawnPoint = _pistolPoint.gameObject.transform.position;
+
+            transform.position = _mousePosition;
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
@@ -34,11 +40,11 @@ namespace Assets.Scripts
             }
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                _shotgun= _infinitePistol;
+                _shooter = _infinitePistol;
             }
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                _shooter.PerformAttack(_mousePosition);
+                _shooter.PerformAttack(_bulletSpawnPoint);
             }
             if (Input.GetKeyDown(KeyCode.R))
             {

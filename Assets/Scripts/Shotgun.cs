@@ -1,29 +1,28 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts;
+using System.Transactions;
+using UnityEngine;
 
-public class Shotgun : IWeapon
+public class Shotgun : Weapon
 {
-    private int _ammo = 15;
-
-    public int GetAmmoCount()
+    public Shotgun(Bullet bullet)
     {
-        throw new System.NotImplementedException();
+        _ammo = 30;
+        _curentAmmo = _magazin = 15;
+        _bullet = bullet;
+        _ammoForShot = 3;
     }
 
-    public void Reload()
+    public override void Shoot(Vector2 placeOfShot)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public void Shoot(Vector2 placeOfShot)
-    {
-        if (_ammo >= 3)
+        if (CheckAmmo(_ammoForShot))
         {
-            Debug.Log($"The shotgun fired x3 Amount of ammo <color=yellow> {_ammo} </color>");
-            _ammo -= 3;
-        }
-        else
-        {
-            Debug.Log("Not enough ammo");
+            for (float i = -0.5f; i < 1; i += 0.5f)
+            {
+                Bullet bullet = Instantiate(_bullet, new Vector2(placeOfShot.x + i, placeOfShot.y),
+                    Quaternion.identity);
+                bullet.Initialize();
+            }
+            _curentAmmo -= 3;
         }
     }
 }

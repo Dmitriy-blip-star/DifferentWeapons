@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts
 {
-    public abstract class Weapon : IWeapon
+    public abstract class Weapon : MonoBehaviour, IWeapon
     {
 
         protected int _ammo;
@@ -10,7 +10,8 @@ namespace Assets.Scripts
         protected int _magazin;
 
         protected Bullet _bullet;
-        //protected Transform _bulletSpawnPoint;
+
+        protected int _ammoForShot;
 
         public int GetAmmoCount()
         {
@@ -42,10 +43,10 @@ namespace Assets.Scripts
         }
         public abstract void Shoot(Vector2 placeOfShot);
 
-        protected bool CheckAmmo()
+        protected bool CheckAmmo(int ammoForShot)
         {
-            if (_curentAmmo > 0)
-            {
+            if (_curentAmmo >= ammoForShot)
+            { 
                 return true;
             }
             else
